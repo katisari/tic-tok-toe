@@ -69,13 +69,24 @@ class _TacToeState extends State<TacToe> {
   }
 
   Divider insertLine() {
-    return const Divider(
-      height: 20,
-      thickness: 5,
-      color: Colors.black,
-      indent: 20,
-    );
+    // if (horizontal) {
+      return const Divider(
+        height: 20,
+        thickness: 5,
+        color: Colors.black,
+        indent: 20,
+      );
+    // }
+    // else {
+    //   return VerticalDivider(
+    //     height: 20,
+    //     thickness: 5,
+    //     color: Colors.black,
+    //   );
+    // }
+    
   }
+
 
   @override
   Widget build(BuildContext context) {
