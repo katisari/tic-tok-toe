@@ -55,81 +55,25 @@ class _TacToeState extends State<TacToe> {
     });
   }
 
-  Expanded createBox(int index) {
-    return Expanded(
-      child: FlatButton(
-        onPressed: () {
-          setState(() {
-            doTurn(index);
-          });
-        },
-        child: Icon(Icons.bubble_chart, color: Colors.blue),
-      ),
-    );
-  }
-
-  Divider insertLine() {
-    // if (horizontal) {
-      return const Divider(
-        height: 20,
-        thickness: 5,
-        color: Colors.black,
-        indent: 20,
-      );
-    // }
-    // else {
-    //   return VerticalDivider(
-    //     height: 20,
-    //     thickness: 5,
-    //     color: Colors.black,
-    //   );
-    // }
-    
-  }
-
+  // void create
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tic Tac Toe'),
+        title: const Text('Tik Tok Toe'),
       ),
-      body: Column(
-        children: <Widget>[
-          Row(children: [Text('Player 1\'s turn')],),
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                createBox(0),
-                insertLine(),
-                createBox(1),
-                insertLine(),
-                createBox(2),
-              ],
-            ),
-          ),
-          insertLine(),
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                createBox(3),
-                createBox(4),
-                createBox(5),
-              ],
-            ),
-          ),
-          insertLine(),
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                createBox(6),
-                createBox(7),
-                createBox(8),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: Column(children: [
+        Text('Player 1\'s turn to go'),
+        Expanded(
+          // use grid tile
+          child: GridView.count(crossAxisCount: 3, children: List.generate(9, (index) {
+            return Container(
+              child: Text(index.toString(),));
+            
+          },),
+        )),
+      ]),
     );
   }
 }
