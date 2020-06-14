@@ -40,15 +40,15 @@ class _TacToeState extends State<TacToe> {
   int round = 0;
   String mainText = 'Player 1\'s turn to go';
   List<String> gameState = [
-    "empty",
-    "empty",
-    "empty",
-    "empty",
-    "empty",
-    "empty",
-    "empty",
-    "empty",
-    "empty",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ];
   void doTurn(int index) {
     setState(() {
@@ -96,7 +96,8 @@ class _TacToeState extends State<TacToe> {
                 );
               },
             ),
-          )),
+          ),),
+          Text('You win'),
         ]),
       ),
     );
