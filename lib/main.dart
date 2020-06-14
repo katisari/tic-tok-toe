@@ -38,6 +38,7 @@ class TacToe extends StatefulWidget {
 
 class _TacToeState extends State<TacToe> {
   int round = 0;
+  String mainText = 'Player 1\'s turn to go';
   List<String> gameState = [
     "empty",
     "empty",
@@ -61,19 +62,43 @@ class _TacToeState extends State<TacToe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tik Tok Toe'),
+        title: const Text('Tic Tok Toe'),
       ),
-      body: Column(children: [
-        Text('Player 1\'s turn to go'),
-        Expanded(
-          // use grid tile
-          child: GridView.count(crossAxisCount: 3, children: List.generate(9, (index) {
-            return Container(
-              child: Text(index.toString(),));
-            
-          },),
-        )),
-      ]),
+      body: Padding(
+        padding: EdgeInsets.all(15.0),
+              child: Column(children: [
+          Text(mainText),
+          Expanded(
+              // use grid tile
+              child: GridView.count(
+            crossAxisCount: 3,
+            children: List.generate(
+              9,
+              (index) {
+                return Container(
+                  decoration: BoxDecoration(border: Border.all()),
+                  child: FlatButton(
+                    onPressed: (gameState[index] == "") ? () {
+                      setState(() {
+                        if (round % 2 == 0) {
+                          mainText = 'Player 2\'s turn to go';
+                          gameState[index] = "1";
+                        } else {
+                          mainText = 'Player 1\'s turn to go';
+                          gameState[index] = "2";
+                        }
+                        round += 1;
+                      }) ;
+                      print(index);
+                    }: null,
+                    child: Text(gameState[index]),
+                  ),
+                );
+              },
+            ),
+          )),
+        ]),
+      ),
     );
   }
 }
