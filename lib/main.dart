@@ -37,8 +37,11 @@ class TacToe extends StatefulWidget {
 }
 
 class _TacToeState extends State<TacToe> {
-  int round = 0;
+  int currPlayer = 1;
+  int gridSize = 3;
   String mainText = 'Player 1\'s turn to go';
+  String whoWonText = '';
+  bool gameEnded = false;
   List<String> gameState = [
     "",
     "",
@@ -50,10 +53,43 @@ class _TacToeState extends State<TacToe> {
     "",
     "",
   ];
-  void doTurn(int index) {
+  List<int> row = [0,0,0];
+  List<int> col = [0,0,0];
+  int diag = 0;
+  int antidiag = 0;
+
+  int doTurn(int index) {
+    List<int> coordinates =  calculateRowColumn(index);
+    int rowIdx = coordinates[0];
+    int colIdx = coordinates[1];
     setState(() {
-      round += 1;
+      // currPlayer is opposite. if currplayer == 1, the player that did this turn is Player 2.
+      int offset = currPlayer * 2 - gridSize;
+      row[rowIdx] += offset;
+      col[colIdx] += offset;
+    
+      if (rowIdx == colIdx) {
+        diag += offset;
+      }
+      if (rowIdx + colIdx == gridSize-1) {
+        antidiag += offset;
+      }
+      // nobody wins
     });
+    // Player 1 wins
+    if (row[rowIdx] == gridSize || col[colIdx] == gridSize || diag == gridSize || antidiag == gridSize) {
+      return 1;
+    }
+    // Player 2 wins
+    if (row[rowIdx] ==  -gridSize || col[colIdx] == -gridSize || diag == -gridSize || antidiag == -gridSize) {
+      return 2;
+    }
+    return 0;
+  }
+  List<int> calculateRowColumn(int index) {
+    int row = index ~/ 3;
+    int col = index % 3;
+    return [row, col];
   }
 
   // void create
@@ -71,25 +107,31 @@ class _TacToeState extends State<TacToe> {
           Expanded(
               // use grid tile
               child: GridView.count(
-            crossAxisCount: 3,
+            crossAxisCount: gridSize,
             children: List.generate(
-              9,
+              (gridSize * gridSize),
               (index) {
                 return Container(
                   decoration: BoxDecoration(border: Border.all()),
                   child: FlatButton(
-                    onPressed: (gameState[index] == "") ? () {
+                    onPressed: (gameState[index] == "" && !gameEnded) ? () {
                       setState(() {
-                        if (round % 2 == 0) {
+                        if (currPlayer == 1) {
                           mainText = 'Player 2\'s turn to go';
                           gameState[index] = "1";
+                          currPlayer = 2;
                         } else {
                           mainText = 'Player 1\'s turn to go';
                           gameState[index] = "2";
+                          currPlayer = 1;
                         }
-                        round += 1;
+                        int winner = doTurn(index);
+                        if (winner != 0) {
+                          whoWonText = "Player $winner won!";
+                          gameEnded = true;
+                        }
+
                       }) ;
-                      print(index);
                     }: null,
                     child: Text(gameState[index]),
                   ),
@@ -97,7 +139,7 @@ class _TacToeState extends State<TacToe> {
               },
             ),
           ),),
-          Text('You win'),
+          Text(whoWonText),
         ]),
       ),
     );
